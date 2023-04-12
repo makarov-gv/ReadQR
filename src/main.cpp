@@ -11,60 +11,39 @@ using namespace std;
 using namespace cv;
 using namespace zbar;
 
-typedef struct
+
+int main()
 {
-  string type;
-  string data;
-  vector <Point> location;
-}decodedObject;
+
+// Read image
+Mat im = imread("QRCode.png");
 
 // Find and decode barcodes and QR codes
-void decode(Mat &im, vector<decodedObject>&decodedObjects)
-{
-
   // Create zbar scanner
-  ImageScanner scanner;
+ImageScanner scanner;
 
-  // Configure scanner
-  scanner.set_config(ZBAR_NONE, ZBAR_CFG_ENABLE, 0);
-  scanner.set_config(ZBAR_QRCODE, ZBAR_CFG_ENABLE, 1);
+// Configure scanner
+scanner.set_config(ZBAR_QRCODE, ZBAR_CFG_ENABLE, 1);
 
-  // Convert image to grayscale
-  Mat imGray;
-  cvtColor(im, imGray, COLOR_BGR2GRAY);
+// Convert image to grayscale
+Mat imGray;
+cvtColor(im, imGray, COLOR_BGR2GRAY);
 
-  // Wrap image data in a zbar image
-  Image image(im.cols, im.rows, "Y800", (uchar *)imGray.data, im.cols * im.rows);
+// Wrap image data in a zbar image
+Image image(im.cols, im.rows, "Y800", (uchar *)imGray.data, im.cols * im.rows);
 
-  // Scan the image for barcodes and QRCodes
-  int n = scanner.scan(image);
+// Scan the image for barcodes and QRCodes
+scanner.scan(image);
 
-  // Print results
-  for(Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++symbol)
-  {
-    decodedObject obj;
-
-    obj.type = symbol->get_type_name();
-    obj.data = symbol->get_data();
-
-    // Print type and data
-    cout << "Type : " << obj.type << endl;
-    cout << "Data : " << obj.data << endl << endl;
-    decodedObjects.push_back(obj);
-  }
-}
-
-int main(int argc, char *argv[])
+// Print results
+for(Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++symbol)
 {
+  string data;
 
-  // Read image
-  Mat im = imread("QRCode.png");
+  data = symbol->get_data();
 
-   // Variable for decoded objects
-   vector<decodedObject> decodedObjects;
-
-   // Find and decode barcodes and QR codes
-   decode(im, decodedObjects);
-
-   return 0;
- }
+  // Print type and data
+  cout << endl << data << endl << endl;
+}
+  return 0;
+}
