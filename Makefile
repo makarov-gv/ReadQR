@@ -20,6 +20,12 @@ OUTPUT	:= output
 # define source directory
 SRC		:= src
 
+# define include directory
+INCLUDE	:= include
+
+# define lib directory
+LIB		:= lib
+
 ifeq ($(OS),Windows_NT)
 MAIN	:= main.exe
 SOURCEDIRS	:= $(SRC)
