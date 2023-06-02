@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 2.8)
+project( ReadQR )
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+include_directories( ${ZBARCV_SOURCE_DIR} )
+add_executable( ReadQR src/main.cpp )
+target_link_libraries( ReadQR ${OpenCV_LIBS} ${ZBAR_LIBRARIES} zbar )
